@@ -14,11 +14,11 @@
         <DockPanel>
             <Menu DockPanel.Dock="Top">
                 <MenuItem Header="New Game">
-                    <MenuItem Header="Single Player" Cursor="Hand" Command="{Binding ViewCommand}" CommandParameter="BoardView"></MenuItem>
-                    <MenuItem Header="Double Player" Cursor="Hand" Command="{Binding ViewCommand}" CommandParameter="BoardView"></MenuItem>
+                    <MenuItem Header="Single Player" Cursor="Hand" Command="{Binding ViewCommand}" CommandParameter="SinglePlayer"></MenuItem>
+                    <MenuItem Header="Double Player" Cursor="Hand" Command="{Binding ViewCommand}" CommandParameter="DoublePlayer"></MenuItem>
                 </MenuItem>
-                <MenuItem Header="Play Online" Cursor="Hand" Command="{Binding ViewCommand}" CommandParameter="BoardView"></MenuItem>
-                <MenuItem Header="Help" Cursor="Hand" Command="{Binding ViewCommand}" CommandParameter="Help"></MenuItem>
+                <MenuItem Header="Play Online" Cursor="Hand" Command="{Binding ViewCommand}" CommandParameter="BoardView" IsEnabled="False"></MenuItem>
+                <MenuItem Header="Help" Cursor="Hand" Command="{Binding HelpCommand}" CommandParameter="Help"></MenuItem>
                 <MenuItem Header="Exit" Cursor="Hand" Command="{Binding ExitCommand}"></MenuItem>
                 
             </Menu>

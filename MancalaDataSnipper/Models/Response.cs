@@ -21,4 +21,10 @@ namespace MancalaDataSnipper.Models
         Player2Win,
         Draw
     }
+
+    public enum GameType
+    {
+        SinglePlayer,
+        DoublePlayer
+    }
 }

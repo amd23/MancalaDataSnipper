@@ -8,6 +8,7 @@ using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
 using MancalaDataSnipper.Views;
+using MancalaDataSnipper.Models;
 using System.Windows;
 
 namespace MancalaDataSnipper
@@ -25,6 +26,7 @@ namespace MancalaDataSnipper
         #region Commands
 
         public DelegateCommand<string> ViewCommand { get; set; }
+        public DelegateCommand HelpCommand { get; set; }
         public DelegateCommand ExitCommand { get; set; }
         #endregion
 
@@ -38,6 +40,7 @@ namespace MancalaDataSnipper
             //regionManager.RegisterViewWithRegion("MainContentRegion")
 
             ViewCommand = new DelegateCommand<string>(ViewCommandHandler);
+            HelpCommand = new DelegateCommand(HelpCommandHandler);
             ExitCommand = new DelegateCommand(ExitCommandHandler);
           
 
@@ -46,12 +49,33 @@ namespace MancalaDataSnipper
 
         #region CommandHandlers
         
-        private void ViewCommandHandler(string uri)
+        private void ViewCommandHandler(string gameType)
         {
-       
-            regionManager.RequestNavigate("MainContentRegion", uri);
+            string uri = "BoardView";
+            var navigationParameters = new NavigationParameters();
+            if (gameType == "SinglePlayer")
+            {
+                navigationParameters.Add("GameType", GameType.SinglePlayer);
+            }
+            else
+            {
+                navigationParameters.Add("GameType", GameType.DoublePlayer);
+            }
+
+            regionManager.RequestNavigate("MainContentRegion", uri, navigationParameters);
         }
 
+        private void HelpCommandHandler()
+        {
+            var helpPageProcess = new System.Diagnostics.ProcessStartInfo
+            {
+                FileName = "https://en.wikipedia.org/wiki/Mancala",
+                UseShellExecute = true
+            };
+
+            System.Diagnostics.Process.Start(helpPageProcess);
+
+        }
         private void ExitCommandHandler()
         {
             Application.Current.Shutdown();

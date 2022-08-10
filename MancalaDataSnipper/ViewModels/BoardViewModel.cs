@@ -11,6 +11,7 @@ using MancalaDataSnipper.Views;
 using MancalaDataSnipper.Models;
 using System.Collections.ObjectModel;
 using System.Windows;
+using System.Security.Cryptography;
 
 namespace MancalaDataSnipper.ViewModels
 {
@@ -23,6 +24,7 @@ namespace MancalaDataSnipper.ViewModels
         public const int TotalPits = 14;
         public const int _StorePlayer1 = 6;
         public const int _StorePlayer2 = 13;
+        public GameType gameType;
         #endregion
 
         #region Properties
@@ -190,75 +192,54 @@ namespace MancalaDataSnipper.ViewModels
 
 
             int pitNumber = Convert.ToUInt16(PitNumber);
+
            // int currentPlayer = GetCurrentPlayer(pitNumber);
 
             Response response = new Response();
 
-            if (Turn == 1)
-            {
-                TurnPlayer1 = true;
-                TurnPlayer2 = false;
-            }
-            else
-            {
-                TurnPlayer1 = false;
-                TurnPlayer2 = true;
+            //if (Turn == 1)
+            //{
+            //    TurnPlayer1 = true;
+            //    TurnPlayer2 = false;
+            //}
+            //else
+            //{
+            //    TurnPlayer1 = false;
+            //    TurnPlayer2 = true;
 
-            }
+            //}
+
             response = Move(Turn, pitNumber);
 
             Turn = response.PlayerTurn;
-            if (Turn == 1)
-            {
-                TurnPlayer1 = true;
-                TurnPlayer2 = false;
-            }
-            else
-            {
-                TurnPlayer1 = false;
-                TurnPlayer2 = true;
+            CheckWin(response);
+            CheckTurn(Turn);
 
-            }
-
-            if (response.Status == GameStatus.Player1Win)
+            if(Turn==2 && gameType== GameType.SinglePlayer)
             {
-                MessageBox.Show("Player 1 has won!");
-            }
-
-            else if (response.Status == GameStatus.Player2Win)
-            {
-                MessageBox.Show("Player 2 has won!");
+                pitNumber = RandomNumberGenerator.GetInt32(0, 6);
+                response= Move(Turn, pitNumber);
+                Turn = response.PlayerTurn;
+                CheckWin(response);
+                CheckTurn(Turn);
 
             }
 
-            else if(response.Status == GameStatus.Draw)
-            {
-                MessageBox.Show("Its a draw!");
-            }
-
-
-
-            //int StonesInthePit = Board[pitNumber];
-            //while (StonesInthePit > 0)
+            //if (Turn == 1)
             //{
-            //    for (int i = 1; i <= StonesInthePit; i++)
-            //    {
-
-            //        board[pitNumber + i]++;
-            //        // pitNumber = pitNumber + i;
-            //        if (pitNumber + i >= 13)
-            //        {
-            //            pitNumber = 0;
-            //            i = -1;
-            //        }
-            //        //StonesInthePit--;
-            //    }
-
-            //    StonesInthePit = 0;
-
+            //    TurnPlayer1 = true;
+            //    TurnPlayer2 = false;
+            //}
+            //else
+            //{
+            //    TurnPlayer1 = false;
+            //    TurnPlayer2 = true;
 
             //}
-            //Board[pitNumber] = 0;
+
+
+
+
 
         }
 
@@ -405,7 +386,41 @@ namespace MancalaDataSnipper.ViewModels
             }
         }
 
+        private void CheckWin(Response response)
+        {
+            if (response.Status == GameStatus.Player1Win)
+            {
+                MessageBox.Show("Player 1 has won!");
+            }
 
+            else if (response.Status == GameStatus.Player2Win)
+            {
+                MessageBox.Show("Player 2 has won!");
+
+            }
+
+            else if (response.Status == GameStatus.Draw)
+            {
+                MessageBox.Show("Its a draw!");
+            }
+
+        }
+
+        private void CheckTurn(int turn)
+        {
+
+            if (Turn == 1)
+            {
+                TurnPlayer1 = true;
+                TurnPlayer2 = false;
+            }
+            else
+            {
+                TurnPlayer1 = false;
+                TurnPlayer2 = true;
+
+            }
+        }
 
         /// <summary>
         /// This method returns the player number based on the pit selected
@@ -429,9 +444,11 @@ namespace MancalaDataSnipper.ViewModels
 
         public void OnNavigatedTo(NavigationContext navigationContext)
         {
+            gameType = (GameType)navigationContext.Parameters["GameType"];
             CurrentPlayer = 1;
             Turn = 1;
             TurnPlayer1 = true;
+            TurnPlayer2 = false;
             Board = new ObservableCollection<int>() { 4, 4, 4, 4, 4, 4, 0, 4, 4, 4, 4, 4, 4, 0 };
             StorePlayer1 = 0;
             StorePlayer2 = 0;

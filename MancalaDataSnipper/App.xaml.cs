@@ -19,6 +19,7 @@ namespace MancalaDataSnipper
         protected override Window CreateShell()
         {
             var w = Container.Resolve<MainWindow>();
+           
             return w;
         }
 

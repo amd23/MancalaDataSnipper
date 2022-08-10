@@ -23,6 +23,26 @@ namespace MancalaDataSnipper
         public MainWindow()
         {
             InitializeComponent();
+            Closing += (sender, e) =>
+            {
+                var vm = this.DataContext as MainWindowViewModel;
+                try
+                {
+                    {
+                        e.Cancel = true;
+                        Application.Current.Shutdown();
+                    }
+                    return;
+                }
+                catch (Exception ex)
+                {
+                    Application.Current.Shutdown();
+                }
+            };
+            
+
+
+            
         }
     }
 }
