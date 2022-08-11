@@ -356,8 +356,13 @@ namespace MancalaDataSnipper.ViewModels
             }
         }
 
+        /// <summary>
+        /// Navigated to is called whenever we navigate to this region
+        /// </summary>
+        /// <param name="navigationContext"></param>
         public void OnNavigatedTo(NavigationContext navigationContext)
         {
+            //Setting the default values in case a new game is started
             gameType = (GameType)navigationContext.Parameters["GameType"];
             CurrentPlayer = 1;
             Turn = 1;
