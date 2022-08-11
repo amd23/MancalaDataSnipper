@@ -7,6 +7,9 @@ using System.Collections.ObjectModel;
 
 namespace MancalaDataSnipper.Models
 {
+    /// <summary>
+    /// Reponse of a certain move in the game
+    /// </summary>
     public class Response
     {
         public GameStatus Status { get; set; }
@@ -14,6 +17,9 @@ namespace MancalaDataSnipper.Models
         public ObservableCollection<int> Board;
     }
 
+    /// <summary>
+    /// Enum for the game status after a certain move
+    /// </summary>
     public enum GameStatus
     {
         CotinueGame,
@@ -22,6 +28,9 @@ namespace MancalaDataSnipper.Models
         Draw
     }
 
+    /// <summary>
+    /// Enum for the game type
+    /// </summary>
     public enum GameType
     {
         SinglePlayer,

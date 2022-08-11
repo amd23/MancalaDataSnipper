@@ -33,8 +33,6 @@ namespace MancalaDataSnipper
             containerRegistry.Register(typeof(object), typeof(MainWindow), nameof(MainWindow));
             containerRegistry.Register(typeof(object), typeof(BoardView), nameof(BoardView));
             containerRegistry.Register(typeof(object), typeof(StartUpView), nameof(StartUpView));
-
-            //throw new NotImplementedException();
         }
     }
 }

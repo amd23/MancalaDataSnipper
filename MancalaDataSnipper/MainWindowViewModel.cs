@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Prism.Regions;
+﻿using Prism.Regions;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
@@ -18,8 +13,6 @@ namespace MancalaDataSnipper
         #region Private Members
         private readonly IRegionManager regionManager;
         private IEventAggregator eventAggregator;
-
-
         #endregion
 
 
@@ -37,19 +30,19 @@ namespace MancalaDataSnipper
             this.regionManager = regionManager;
             this.eventAggregator = eventAggregator;
 
-            //regionManager.RegisterViewWithRegion("MainContentRegion")
-
             ViewCommand = new DelegateCommand<string>(ViewCommandHandler);
             HelpCommand = new DelegateCommand(HelpCommandHandler);
             ExitCommand = new DelegateCommand(ExitCommandHandler);
-            regionManager.RegisterViewWithRegion("MainContentRegion", typeof(StartUpView));
-          
-
+            regionManager.RegisterViewWithRegion("MainContentRegion", typeof(StartUpView));        
         }
         #endregion
 
         #region CommandHandlers
-        
+        /// <summary>
+        /// Command handler navigates to the region based on gametype.
+        /// Gametype can be single or double.
+        /// </summary>
+        /// <param name="gameType"></param>
         private void ViewCommandHandler(string gameType)
         {
             string uri = "BoardView";
@@ -66,6 +59,10 @@ namespace MancalaDataSnipper
             regionManager.RequestNavigate("MainContentRegion", uri, navigationParameters);
         }
 
+        /// <summary>
+        /// Command handler to open Mancala Wiki page.
+        /// The user can click on it to get help.
+        /// </summary>
         private void HelpCommandHandler()
         {
             var helpPageProcess = new System.Diagnostics.ProcessStartInfo
@@ -77,13 +74,14 @@ namespace MancalaDataSnipper
             System.Diagnostics.Process.Start(helpPageProcess);
 
         }
+        /// <summary>
+        /// Command handler to exit the application
+        /// </summary>
         private void ExitCommandHandler()
         {
             Application.Current.Shutdown();
         }
 
         #endregion
-
-
     }
 }

@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Prism.Regions;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
-using MancalaDataSnipper.Views;
 using MancalaDataSnipper.Models;
 using System.Collections.ObjectModel;
 using System.Windows;
@@ -20,15 +16,38 @@ namespace MancalaDataSnipper.ViewModels
         #region Private Members
         private readonly IRegionManager regionManager;
         private IEventAggregator eventAggregator;
+
+        /// <summary>
+        /// By default, player 1 will have the first turn
+        /// That is why initializing current player to 1
+        /// </summary>
         public  int CurrentPlayer=1;
+        /// <summary>
+        /// Total number of pits in the game
+        /// </summary>
         public const int TotalPits = 14;
+
+        /// <summary>
+        /// Index for player 1's store
+        /// </summary>
         public const int _StorePlayer1 = 6;
+
+        /// <summary>
+        /// Index for player 2's store
+        /// </summary>
         public const int _StorePlayer2 = 13;
+
+        /// <summary>
+        /// Game type selected by the user
+        /// </summary>
         public GameType gameType;
         #endregion
 
         #region Properties
 
+        /// <summary>
+        /// Collection which holds the pits and the store
+        /// </summary>
         private ObservableCollection<int> board = new ObservableCollection<int>() { 4, 4, 4, 4, 4, 4, 0, 4, 4, 4, 4, 4, 4, 0 };
         public ObservableCollection<int> Board
         {
@@ -42,6 +61,9 @@ namespace MancalaDataSnipper.ViewModels
             }
         }
 
+        /// <summary>
+        /// Store for player 1
+        /// </summary>
         private int storePlayer1 = 0;
         public int StorePlayer1
         {
@@ -49,19 +71,10 @@ namespace MancalaDataSnipper.ViewModels
             set { SetProperty(ref storePlayer1, value); }
         }
 
-        private ObservableCollection<int> stonesPlayer1 = new ObservableCollection<int>() { 4, 4, 4, 4, 4, 4 };
-        public ObservableCollection<int> StonesPlayer1
-        {
-            get { return stonesPlayer1; }
-            set
-            {
-                if (value != stonesPlayer1)
-                {
-                    SetProperty(ref stonesPlayer1, value);
-                }
-            }
-        }
-
+        /// <summary>
+        /// Store for player 2 and in case game type is single player, it will be the
+        /// store for CPU
+        /// </summary>
         private int storePlayer2 = 0;
         public int StorePlayer2
         {
@@ -69,19 +82,9 @@ namespace MancalaDataSnipper.ViewModels
             set { SetProperty(ref storePlayer2, value); }
         }
 
-        private ObservableCollection<int> stonesPlayer2 = new ObservableCollection<int>() { 4, 4, 4, 4, 4, 4 };
-        public ObservableCollection<int> StonesPlayer2
-        {
-            get { return stonesPlayer2; }
-            set
-            {
-                if (value != stonesPlayer2)
-                {
-                    SetProperty(ref stonesPlayer2, value);
-                }
-            }
-        }
-
+        /// <summary>
+        /// Player 1 or 2 turn
+        /// </summary>
         private int turn;
         public int Turn
         {
@@ -89,6 +92,9 @@ namespace MancalaDataSnipper.ViewModels
             set { SetProperty(ref turn, value); }
         }
 
+        /// <summary>
+        /// Bool to enable and disable player 1's pits
+        /// </summary>
         private bool turnPlayer1;
         public bool TurnPlayer1
         {
@@ -96,6 +102,10 @@ namespace MancalaDataSnipper.ViewModels
             set { SetProperty(ref turnPlayer1, value); }
         }
 
+
+        /// <summary>
+        /// Bool to enable and disable player 2's or computer's pits
+        /// </summary>
         private bool turnPlayer2;
         public bool TurnPlayer2
         {
@@ -111,110 +121,21 @@ namespace MancalaDataSnipper.ViewModels
         #endregion
 
         #region CommandHandlers
-
-        //private void TakeTurnCommandHandler(string PitNumber)
-        //{
-        //    int pitNumber = Convert.ToUInt16(PitNumber);
-        //    int StonesInthePit = StonesPlayer1[pitNumber];
-        //    while (StonesInthePit > 0)
-        //    {
-        //        if (pitNumber < 5 && pitNumber>=0)
-        //        {
-        //            StonesPlayer1[pitNumber + 1]++;
-        //            StonesPlayer1[pitNumber]--;
-
-
-        //            //int NextPitNumber = pitNumber;
-        //            //for (int i = 1; i <= StonesInthePit; i++)
-        //            //{
-        //            //    if (i <= 5)
-        //            //    //{
-        //            //        StonesPlayer1[i]++;
-        //            //        StonesPlayer1[pitNumber]--;
-        //            //        //NextPitNumber++;
-        //            //        //StonesInthePit--;
-        //            //    //}
-        //            //   // else
-        //            //     //   break;
-        //            //}
-        //        }
-        //        else if(pitNumber+1>5)
-        //        {
-        //            StorePlayer1++;
-        //            StonesPlayer1[pitNumber]--;
-        //        }
-
-        //        else if(pitNumber+1 >5 && StonesInthePit>0)
-        //        {
-
-        //            StonesPlayer2[pitNumber]
-        //        }
-
-
-
-        //        //if (pitNumber + 1 > 5 || pitNumber==5)
-        //        //{
-        //        //    StonesInthePit = StonesPlayer1[pitNumber];
-        //        //    StorePlayer1++;
-        //        //    StonesPlayer1[pitNumber]--;
-
-        //        //    int NextPitNumber = 0;
-        //        //    StonesInthePit = StonesPlayer1[pitNumber];
-        //        //    for (int i = 0; i < StonesInthePit; i++)
-        //        //    {
-        //        //        if (NextPitNumber+i <= 5)
-        //        //        {
-        //        //            StonesPlayer2[NextPitNumber + i]++;
-        //        //            StonesPlayer1[pitNumber]--;
-        //        //            NextPitNumber++;
-        //        //            StonesInthePit--;
-        //        //        }
-        //        //        else
-        //        //            break;
-        //        //    }
-
-        //        //}
-
-
-
-
-
-        //        //StonesPlayer1[PitNumber+1]
-        //        //StonesPlayer1[0]--;
-
-        //    }
-
-        //}
-
-
+        /// <summary>
+        /// Command handler when we take turn
+        /// </summary>
+        /// <param name="PitNumber"></param>
         private void TakeTurnCommandHandler(string PitNumber)
         {
-
-
             int pitNumber = Convert.ToUInt16(PitNumber);
-
-           // int currentPlayer = GetCurrentPlayer(pitNumber);
-
             Response response = new Response();
 
-            //if (Turn == 1)
-            //{
-            //    TurnPlayer1 = true;
-            //    TurnPlayer2 = false;
-            //}
-            //else
-            //{
-            //    TurnPlayer1 = false;
-            //    TurnPlayer2 = true;
-
-            //}
-
             response = Move(Turn, pitNumber);
-
             Turn = response.PlayerTurn;
             CheckWin(response);
             CheckTurn(Turn);
 
+            // For single player game, the player 2 would be computer
             if(Turn==2 && gameType== GameType.SinglePlayer)
             {
                 pitNumber = RandomNumberGenerator.GetInt32(0, 6);
@@ -224,25 +145,19 @@ namespace MancalaDataSnipper.ViewModels
                 CheckTurn(Turn);
 
             }
-
-            //if (Turn == 1)
-            //{
-            //    TurnPlayer1 = true;
-            //    TurnPlayer2 = false;
-            //}
-            //else
-            //{
-            //    TurnPlayer1 = false;
-            //    TurnPlayer2 = true;
-
-            //}
-
-
-
-
-
         }
 
+        /// <summary>
+        /// Make the move
+        /// </summary>
+        /// <param name="playerNo">
+        /// Player number, it can be either 1 or 2
+        /// </param>
+        /// <param name="pitNo">
+        /// Pit number that is selected between 0 to 5
+        /// </param>
+        /// <returns></returns>
+        /// <exception cref="IndexOutOfRangeException"></exception>
         public Response Move(int playerNo, int pitNo)
         {
             if (pitNo < 0 || pitNo >= TotalPits)
@@ -250,7 +165,7 @@ namespace MancalaDataSnipper.ViewModels
                 throw new IndexOutOfRangeException();
             }
 
-            int lastPitNo = RunMancala(playerNo, pitNo);
+            int lastPitNo = Runner(playerNo, pitNo);
             Response response = new Response();
             if (lastPitNo == _StorePlayer1)
             {
@@ -266,6 +181,7 @@ namespace MancalaDataSnipper.ViewModels
                 response.PlayerTurn = 2;
                 return response;
             }
+            // if last pit no is between 0-5 of player 1, includes player 1s store but not the player 2 store
             else if (playerNo == 1 && lastPitNo > _StorePlayer1 && lastPitNo < _StorePlayer2)
             {
                 response.Board = Board;
@@ -280,19 +196,21 @@ namespace MancalaDataSnipper.ViewModels
                 response.PlayerTurn = 1;
                 return response;
             }
+
+            // Changing the stones across the pits if there is one stone in the last pit
             else if (Board[lastPitNo] == 1)
             {
                 int acrossPitNo = Math.Abs(11 - lastPitNo);
                 Board[lastPitNo] = 0;
-                int mancalaInAcrossPit = Board[acrossPitNo];
+                int stonesInAcrossPit = Board[acrossPitNo];
                 Board[acrossPitNo] = 0;
                 if (playerNo == 1)
                 {
-                    Board[_StorePlayer1] += mancalaInAcrossPit + 1;
+                    Board[_StorePlayer1] += stonesInAcrossPit + 1;
                 }
                 else
                 {
-                    Board[_StorePlayer2] += mancalaInAcrossPit + 1;
+                    Board[_StorePlayer2] += stonesInAcrossPit + 1;
                 }
             }
 
@@ -304,27 +222,34 @@ namespace MancalaDataSnipper.ViewModels
 
 
         /// <summary>
-        /// 
+        /// To put the stones in the respective pits and stores on the board
         /// </summary>
         /// <param name="playerNo"></param>
+        /// It can be player 1 or 2
         /// <param name="pitNo"></param>
+        /// The pit number which is selected.
+        /// For both the users it would be 0 to 5
         /// <returns></returns>
-        private int RunMancala(int playerNo, int pitNo)
+        private int Runner(int playerNo, int pitNo)
         {
             pitNo += ((playerNo - 1) * 7);
             int stones = Board[pitNo];
             int currentPitNo = pitNo + 1;
             int lastPitNo = 0;
             Board[pitNo] = 0;
+
+            /// While there are stones in the selected pit, we shall check in which pits we should put them in
             while (stones > 0)
             {
                 int tempPitNo = currentPitNo % TotalPits;
                 lastPitNo = tempPitNo;
+                ///if the stone belongs in the store of player 1
                 if (tempPitNo == _StorePlayer1 && playerNo == 1)
                 {
                     ++Board[_StorePlayer1];
                     stones--;
                 }
+                /// if the stone belongs to the store of player 2
                 else if (tempPitNo == _StorePlayer2 && playerNo == 2)
                 {
                     ++Board[_StorePlayer2];
@@ -346,9 +271,10 @@ namespace MancalaDataSnipper.ViewModels
 
 
         /// <summary>
-        /// 
+        /// Check the game status
         /// </summary>
-        /// <returns></returns>
+        /// <returns> Returns the status that either to continue game
+        /// or a player won or its a draw</returns>
         private GameStatus IsDone()
         {
             bool isDone = false;
@@ -365,27 +291,31 @@ namespace MancalaDataSnipper.ViewModels
 
             if (!isDone)
             {
-                // Game on
+                // Continue game
                 return GameStatus.CotinueGame;
             }
 
             if (Board[_StorePlayer1] > Board[_StorePlayer2])
             {
-                // Player 1 win
+                // Player 1 has won
                 return GameStatus.Player1Win;
             }
             else if (Board[_StorePlayer1] < Board[_StorePlayer2])
             {
-                // Player 2 win
+                // Player 2 has won
                 return GameStatus.Player2Win;
             }
             else
             {
-                // Draw
+                // It is a draw
                 return GameStatus.Draw;
             }
         }
 
+        /// <summary>
+        /// Show message based on the response
+        /// </summary>
+        /// <param name="response"></param>
         private void CheckWin(Response response)
         {
             if (response.Status == GameStatus.Player1Win)
@@ -406,6 +336,10 @@ namespace MancalaDataSnipper.ViewModels
 
         }
 
+        /// <summary>
+        /// Check if its player 1 turn or player 2
+        /// </summary>
+        /// <param name="turn"></param>
         private void CheckTurn(int turn)
         {
 
@@ -420,26 +354,6 @@ namespace MancalaDataSnipper.ViewModels
                 TurnPlayer2 = true;
 
             }
-        }
-
-        /// <summary>
-        /// This method returns the player number based on the pit selected
-        /// </summary>
-        /// <param name="PitNumber"></param>
-        /// <returns>The player number</returns>
-        private int GetCurrentPlayer(int PitNumber)
-        {
-            if (PitNumber >= 0 && PitNumber <= 5)
-            {
-                return 1;
-            }
-            else if (PitNumber >= 7 && PitNumber <= 12)
-            {
-                return 2;
-            }
-            else
-                return 0;
-
         }
 
         public void OnNavigatedTo(NavigationContext navigationContext)
@@ -459,16 +373,10 @@ namespace MancalaDataSnipper.ViewModels
         public bool IsNavigationTarget(NavigationContext navigationContext)
         {
             return true;
-            //throw new NotImplementedException();
         }
 
         public void OnNavigatedFrom(NavigationContext navigationContext)
         {
-            //board = new ObservableCollection<int>() { 4, 4, 4, 4, 4, 4, 0, 4, 4, 4, 4, 4, 4, 0 };
-            //StorePlayer1 = 0;
-            //StorePlayer2 = 0;
-
-            // throw new NotImplementedException();
         }
         #endregion
 
@@ -478,16 +386,8 @@ namespace MancalaDataSnipper.ViewModels
             this.regionManager = regionManager;
             this.eventAggregator = eventAggregator;
             Turn = 1;
-
-
-            //regionManager.RegisterViewWithRegion("MainContentRegion")
-
             TakeTurnCommand = new DelegateCommand<string>(TakeTurnCommandHandler);
-            //ExitCommand = new DelegateCommand(ExitCommandHandler);
-
         }
-        #endregion
-
-        
+        #endregion 
     }
 }

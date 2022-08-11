@@ -39,11 +39,7 @@ namespace MancalaDataSnipper
                 {
                     Application.Current.Shutdown();
                 }
-            };
-            
-
-
-            
+            };           
         }
     }
 }

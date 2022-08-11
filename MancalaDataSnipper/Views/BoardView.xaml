@@ -28,7 +28,7 @@
             <TextBlock DockPanel.Dock="Right" HorizontalAlignment="Center" Margin="0,6,0,0" FontSize="20" Text="{Binding Turn}"></TextBlock>
         </DockPanel>
 
-            <!--First Players Store-->
+        <!--First Players Store-->
         <Border Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" Background="#2484C7" CornerRadius="50" Height="100" Width="100">
             <DockPanel>
                 <Label Content="In Store: " HorizontalAlignment="Center" FontWeight="Bold" FontSize="15" Margin="10,0,0,0" Foreground="White" VerticalAlignment="Center"></Label>
@@ -134,8 +134,5 @@
                 <TextBlock Text="{Binding Board[13]}" Foreground="White" HorizontalAlignment="Center" Margin="-20,0,0,0" FontWeight="Bold" FontSize="15" VerticalAlignment="Center"></TextBlock>
             </DockPanel>
         </Border>
-
-
-
     </Grid>
 </UserControl>
