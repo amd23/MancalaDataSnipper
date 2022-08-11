@@ -23,6 +23,7 @@ namespace MancalaDataSnipper
         public MainWindow()
         {
             InitializeComponent();
+            this.Hide();
             Closing += (sender, e) =>
             {
                 var vm = this.DataContext as MainWindowViewModel;

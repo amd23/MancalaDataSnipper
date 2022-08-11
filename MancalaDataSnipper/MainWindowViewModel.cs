@@ -42,6 +42,7 @@ namespace MancalaDataSnipper
             ViewCommand = new DelegateCommand<string>(ViewCommandHandler);
             HelpCommand = new DelegateCommand(HelpCommandHandler);
             ExitCommand = new DelegateCommand(ExitCommandHandler);
+            regionManager.RegisterViewWithRegion("MainContentRegion", typeof(StartUpView));
           
 
         }
